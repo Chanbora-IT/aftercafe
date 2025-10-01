@@ -21,7 +21,8 @@ COPY . .
 RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 
 # Build the JAR
-RUN ./gradlew clean bootJar -x test --no-daemon
+RUN ./gradlew clean bootJar -x test --no-daemon --stacktrace --info
+
 
 # Stage 2: Run JAR
 FROM eclipse-temurin:21-jdk
