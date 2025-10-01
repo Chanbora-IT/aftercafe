@@ -2,23 +2,26 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-# Copy Gradle wrapper and build files
+# Copy Gradle wrapper and configs first
 COPY gradlew .
 COPY gradle gradle
 COPY gradle/wrapper gradle/wrapper
 COPY build.gradle settings.gradle ./
 
-# Make Gradle wrapper executable
-RUN chmod +x gradlew
+# Fix permissions + line endings for gradlew
+RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 
-# Download dependencies and build (skip tests for speed)
+# Pre-download dependencies (optional)
 RUN ./gradlew build -x test --no-daemon || true
 
-# Copy the rest of the source code
+# Now copy the rest of the source code
 COPY . .
 
+# Fix permissions AGAIN after copying everything (important!)
+RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
+
 # Build the JAR
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean bootJar -x test --no-daemon
 
 # Stage 2: Run JAR
 FROM eclipse-temurin:21-jdk
