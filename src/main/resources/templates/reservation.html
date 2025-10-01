@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<!-- Header -->
+<div th:replace="~{base::header}"></div>
+
+<body>
+    <!-- Navbar Start -->
+   		<div th:replace="~{base::navbar(reservation=' active ')}"></div>
+    <!-- Navbar End -->
+
+
+    <!-- Page Header Start -->
+    <div th:replace="~{base::pageHeader(text='Reservation')} " ></div>
+    <!-- Page Header End -->
+
+
+    <!-- Reservation Start -->
+    <div th:replace="~{base::reservation}" ></div>
+    <!-- Reservation End -->
+
+
+    <!-- Footer Start -->
+    <div th:replace=~{base::footer}></div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <div th:replace="~{base::script}"></div>
+</body>
+
+</html>

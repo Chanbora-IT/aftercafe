@@ -1,0 +1,29 @@
+# Stage 1: Build JAR
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /app
+
+# Copy Gradle wrapper and build files first
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle settings.gradle ./
+
+# Make wrapper executable
+RUN chmod +x gradlew
+
+# Download dependencies (caches this layer)
+RUN ./gradlew build -x test --no-daemon || true
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the JAR
+RUN ./gradlew clean bootJar -x test --no-daemon
+
+# Stage 2: Run JAR
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+
+COPY --from=build /app/build/libs/*.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
