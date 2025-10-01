@@ -18,7 +18,7 @@ RUN ./gradlew build -x test --no-daemon || true
 COPY . .
 
 # Build the JAR
-RUN ./gradlew clean bootJar -x test --no-daemon
+RUN ./gradlew clean build -x test
 
 # Stage 2: Run JAR
 FROM eclipse-temurin:21-jdk
