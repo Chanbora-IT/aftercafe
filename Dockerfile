@@ -5,14 +5,14 @@ WORKDIR /app
 # Copy Gradle wrapper and build files
 COPY gradlew .
 COPY gradle gradle
-COPY build.gradle settings.gradle ./
 COPY gradle/wrapper gradle/wrapper
+COPY build.gradle settings.gradle ./
 
 # Make Gradle wrapper executable
 RUN chmod +x gradlew
 
-# Download dependencies (cache layer)
-RUN ./gradlew dependencies --no-daemon
+# Download dependencies and build (skip tests for speed)
+RUN ./gradlew build -x test --no-daemon || true
 
 # Copy the rest of the source code
 COPY . .
